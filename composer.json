@@ -45,13 +45,13 @@
     },
     "autoload": {
         "psr-4": {
-            "SpomkyLabs\\LexikJoseBundle\\": ""
+            "mabuonomo\\LexikJoseBundle\\": ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SpomkyLabs\\TestBundle\\": "Tests/Bundle/TestBundle",
-            "SpomkyLabs\\LexikJoseBundle\\Features\\Context\\": "Tests/Context"
+            "mabuonomo\\TestBundle\\": "Tests/Bundle/TestBundle",
+            "mabuonomo\\LexikJoseBundle\\Features\\Context\\": "Tests/Context"
         }
     },
     "extra": {
