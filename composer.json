@@ -2,17 +2,21 @@
     "name": "spomky-labs/lexik-jose-bridge",
     "type": "symfony-bundle",
     "description": "Bridge to allow the use of web-token/jwt-framework with the Lexik JWT Authentication Bundle",
-    "keywords": ["Jose", "Bundle", "Symfony"],
+    "keywords": [
+        "Jose",
+        "Bundle",
+        "Symfony"
+    ],
     "homepage": "https://github.com/Spomky-Labs/lexik-jose-bridge",
     "license": "MIT",
     "authors": [
         {
-          "name": "Florent Morselli",
-          "homepage": "https://github.com/Spomky"
+            "name": "Florent Morselli",
+            "homepage": "https://github.com/Spomky"
         },
         {
-          "name": "All contributors",
-          "homepage": "https://github.com/Spomky-Labs/lexik-jose-bridge/contributors"
+            "name": "All contributors",
+            "homepage": "https://github.com/Spomky-Labs/lexik-jose-bridge/contributors"
         }
     ],
     "require": {
@@ -35,7 +39,9 @@
         "behat/behat": "^3.0",
         "behat/mink-extension": "^2.1",
         "behat/mink-browserkit-driver": "^1.1",
-        "behat/symfony2-extension":  "^2.1"
+        "behat/symfony2-extension": "^2.1",
+        "facile-it/facile-coding-standard": "^0.3.1",
+        "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -52,5 +58,9 @@
         "branch-alias": {
             "dev-master": "2.1.x-dev"
         }
+    },
+    "scripts": {
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix --diff"
     }
 }

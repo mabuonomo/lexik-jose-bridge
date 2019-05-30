@@ -65,7 +65,7 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
      */
     public function loadServices(ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
 
@@ -74,7 +74,7 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
      */
     public function loadEncryptionServices(ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('encryption_services.yml');
     }
 
@@ -95,8 +95,16 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
         ConfigurationHelper::addJWSBuilder($container, $this->getAlias(), [$bridgeConfig['signature_algorithm']], $isDebug);
         ConfigurationHelper::addJWSVerifier($container, $this->getAlias(), [$bridgeConfig['signature_algorithm']], $isDebug);
         ConfigurationHelper::addClaimChecker($container, $this->getAlias(), $claim_aliases, $isDebug);
-        ConfigurationHelper::addHeaderChecker($container, $this->getAlias().'_signature', ['lexik_jose_signature_algorithm']);
-        ConfigurationHelper::addKeyset($container, 'lexik_jose_bridge.signature', 'jwkset', ['value' => $bridgeConfig['key_set'], 'is_public' => $isDebug]);
+        ConfigurationHelper::addHeaderChecker($container, $this->getAlias() . '_signature', ['lexik_jose_signature_algorithm']);
+        ConfigurationHelper::addKeyset(
+            $container,
+            'lexik_jose_bridge.signature',
+            'jwkset',
+            [
+                'value' => file_get_contents($bridgeConfig['key_set_url']),
+                'is_public' => $isDebug
+            ]
+        );
 
         if (isset($bridgeConfig['encryption']['enabled']) && (true === $bridgeConfig['encryption']['enabled'])) {
             $this->enableEncryptionSupport($container, $bridgeConfig, $isDebug);
@@ -108,14 +116,14 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
 
     /**
      * @param ContainerBuilder $container
-     * @param array            $bridgeConfig
-     * @param bool             $isDebug
+     * @param array $bridgeConfig
+     * @param bool $isDebug
      */
     private function enableEncryptionSupport(ContainerBuilder $container, array $bridgeConfig, bool $isDebug)
     {
         ConfigurationHelper::addJWEBuilder($container, $this->getAlias(), [$bridgeConfig['encryption']['key_encryption_algorithm']], [$bridgeConfig['encryption']['content_encryption_algorithm']], ['DEF'], $isDebug);
         ConfigurationHelper::addJWEDecrypter($container, $this->getAlias(), [$bridgeConfig['encryption']['key_encryption_algorithm']], [$bridgeConfig['encryption']['content_encryption_algorithm']], ['DEF'], $isDebug);
-        ConfigurationHelper::addHeaderChecker($container, $this->getAlias().'_encryption', ['lexik_jose_audience', 'lexik_jose_issuer', 'lexik_jose_key_encryption_algorithm', 'lexik_jose_content_encryption_algorithm']);
-        ConfigurationHelper::addKeyset($container, 'lexik_jose_bridge.encryption', 'jwkset', ['value' => $bridgeConfig['encryption']['key_set'], 'is_public' => $isDebug]);
+        ConfigurationHelper::addHeaderChecker($container, $this->getAlias() . '_encryption', ['lexik_jose_audience', 'lexik_jose_issuer', 'lexik_jose_key_encryption_algorithm', 'lexik_jose_content_encryption_algorithm']);
+        ConfigurationHelper::addKeyset($container, 'lexik_jose_bridge.encryption', 'jwkset', ['value' => $bridgeConfig['encryption']['key_set_url'], 'is_public' => $isDebug]);
     }
 }
