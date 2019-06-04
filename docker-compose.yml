@@ -1,13 +1,8 @@
 version: '3.2'
 services:
   php:
-    container_name: dwh_php
+    container_name: jwt_php
     image: gitlab.facile.it:4567/utilities/php-fpm/dev:latest
     volumes:
       - ./:/var/www/app
     working_dir: /var/www/app
-    extra_hosts:
-      - gitlab.facile.it:172.27.0.57
-#    environment:
-#      COMPOSER_AUTH: ${COMPOSER_AUTH}
-#      COMPOSER_ALLOW_SUPERUSER: 1

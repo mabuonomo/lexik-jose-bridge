@@ -40,3 +40,6 @@ services:
             - '%lexik_jose_bridge.encoder.signature_algorithm%'
         tags:
             - { name: 'jose.checker.header', alias: 'lexik_jose_signature_algorithm' }
+
+    http.cache.service:
+        class: SpomkyLabs\LexikJoseBundle\Services\HTTPClientService
