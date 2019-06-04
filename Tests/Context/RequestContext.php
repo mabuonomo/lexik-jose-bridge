@@ -16,10 +16,11 @@ use Behat\Mink\Driver\BrowserKitDriver;
 trait RequestContext
 {
     private $request_builder = null;
+
     private $exception = null;
 
     /**
-     * @return null|string
+     * @return string|null
      */
     abstract public function getToken();
 
@@ -52,7 +53,7 @@ trait RequestContext
     }
 
     /**
-     * @return null|\Exception
+     * @return \Exception|null
      */
     public function getException()
     {
@@ -61,6 +62,9 @@ trait RequestContext
 
     /**
      * @Given I add key :key with value :value in the header
+     *
+     * @param mixed $key
+     * @param mixed $value
      */
     public function iAddKeyWithValueInTheHeader($key, $value)
     {
@@ -69,6 +73,9 @@ trait RequestContext
 
     /**
      * @Given I add key :key with value :value in the query parameter
+     *
+     * @param mixed $key
+     * @param mixed $value
      */
     public function iAddKeyWithValueInTheQueryParameter($key, $value)
     {
@@ -77,14 +84,20 @@ trait RequestContext
 
     /**
      * @Given I add user :user and password :secret in the authorization header
+     *
+     * @param mixed $user
+     * @param mixed $secret
      */
     public function iAddUserAndPasswordInTheAuthorizationHeader($user, $secret)
     {
-        $this->getRequestBuilder()->addHeader('Authorization', 'Basic '.base64_encode("$user:$secret"));
+        $this->getRequestBuilder()->addHeader('Authorization', 'Basic ' . \base64_encode("$user:$secret"));
     }
 
     /**
      * @Given I add key :key with value :value in the body request
+     *
+     * @param mixed $key
+     * @param mixed $value
      */
     public function iAddKeyWithValueInTheBodyRequest($key, $value)
     {
@@ -101,11 +114,13 @@ trait RequestContext
             throw new \Exception('The token is not available. Are you logged in?');
         }
 
-        $this->getRequestBuilder()->addHeader('Authorization', 'Bearer '.$token);
+        $this->getRequestBuilder()->addHeader('Authorization', 'Bearer ' . $token);
     }
 
     /**
      * @Given the request content type is :content_type
+     *
+     * @param mixed $content_type
      */
     public function theContentTypeIs($content_type)
     {
@@ -132,10 +147,11 @@ trait RequestContext
      * @When I :method the request to :uri
      *
      * @param string $method
+     * @param mixed  $uri
      */
     public function iTheRequestTo($method, $uri)
     {
-        if (!$this->getSession()->getDriver() instanceof BrowserKitDriver) {
+        if (! $this->getSession()->getDriver() instanceof BrowserKitDriver) {
             throw new \Exception('Unsupported driver.');
         }
 
@@ -161,6 +177,8 @@ trait RequestContext
 
     /**
      * @Given I am on the page :url
+     *
+     * @param mixed $url
      */
     public function iAmOnThePage($url)
     {
@@ -179,14 +197,16 @@ trait RequestContext
 
     /**
      * @Then I should receive an exception :message
+     *
+     * @param mixed $message
      */
     public function iShouldReceiveAnException($message)
     {
-        if (!$this->getException() instanceof \Exception) {
+        if (! $this->getException() instanceof \Exception) {
             throw new \Exception('No exception caught.');
         }
         if ($message !== $this->getException()->getMessage()) {
-            throw new \Exception(sprintf('The exception has not the expected message: "%s". Message is "".', $message, $this->getException()->getMessage()));
+            throw new \Exception(\sprintf('The exception has not the expected message: "%s". Message is "".', $message, $this->getException()->getMessage()));
         }
     }
 
@@ -196,7 +216,7 @@ trait RequestContext
     public function theErrorListenerShouldReceiveAnExpiredTokenEvent()
     {
         $events = $this->getContainer()->get('acme_api.event.jwt_created_listener')->getExpiredTokenEvents();
-        if (1 !== count($events)) {
+        if (1 !== \count($events)) {
             throw new \Exception();
         }
     }
@@ -207,7 +227,7 @@ trait RequestContext
     public function theErrorListenerShouldReceiveAnInvalidTokenEvent()
     {
         $events = $this->getContainer()->get('acme_api.event.jwt_created_listener')->getInvalidTokenEvents();
-        if (1 !== count($events)) {
+        if (1 !== \count($events)) {
             throw new \Exception();
         }
     }

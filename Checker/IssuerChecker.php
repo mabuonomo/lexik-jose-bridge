@@ -45,7 +45,7 @@ final class IssuerChecker implements ClaimChecker, HeaderChecker
     public function checkClaim($issuer)
     {
         if ($this->issuer !== $issuer) {
-            throw new \Exception(sprintf('The issuer "%s" is not allowed.', $issuer));
+            throw new \Exception(\sprintf('The issuer "%s" is not allowed.', $issuer));
         }
     }
 

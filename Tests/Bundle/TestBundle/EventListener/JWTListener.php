@@ -64,7 +64,7 @@ final class JWTListener
 
         $payload = $event->getPayload();
 
-        if (!array_key_exists('ip', $payload) || $payload['ip'] !== $request->getClientIp()) {
+        if (! \array_key_exists('ip', $payload) || $payload['ip'] !== $request->getClientIp()) {
             $event->markAsInvalid();
         }
     }

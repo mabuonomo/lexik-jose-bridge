@@ -132,17 +132,19 @@ final class LexikJoseEncoder implements JWTEncoderInterface
      * @param string               $signatureAlgorithm
      * @param string               $issuer
      * @param int                  $ttl
+     * @param string               $audience
      */
-    public function __construct(JWSBuilder $jwsBuilder,
-                                JWSVerifier $jwsLoader,
-                                ClaimCheckerManager $claimCheckerManager,
-                                HeaderCheckerManager $signatureHeaderCheckerManager,
-                                JWKSet $signatureKeyset,
-                                $signatureKeyIndex,
-                                string $signatureAlgorithm,
-                                string $issuer,
-                                string $audience,
-                                int $ttl
+    public function __construct(
+        JWSBuilder $jwsBuilder,
+        JWSVerifier $jwsLoader,
+        ClaimCheckerManager $claimCheckerManager,
+        HeaderCheckerManager $signatureHeaderCheckerManager,
+        JWKSet $signatureKeyset,
+        $signatureKeyIndex,
+        string $signatureAlgorithm,
+        string $issuer,
+        string $audience,
+        int $ttl
     ) {
         $this->jwsBuilder = $jwsBuilder;
         $this->jwsLoader = $jwsLoader;
@@ -190,7 +192,7 @@ final class LexikJoseEncoder implements JWTEncoderInterface
 
             return $jwt;
         } catch (\Exception $e) {
-            throw new JWTEncodeFailureException('encoding_error', 'An error occurred while trying to encode the JWT token: '.$e->getMessage(), $e);
+            throw new JWTEncodeFailureException('encoding_error', 'An error occurred while trying to encode the JWT token: ' . $e->getMessage(), $e);
         }
     }
 
@@ -202,7 +204,7 @@ final class LexikJoseEncoder implements JWTEncoderInterface
     private function sign(array $payload): string
     {
         $jsonConverter = new StandardConverter();
-        $payload = array_merge(
+        $payload = \array_merge(
             $payload,
             $this->getAdditionalPayload()
         );
@@ -310,11 +312,11 @@ final class LexikJoseEncoder implements JWTEncoderInterface
                     $reason = JWTDecodeFailureException::INVALID_TOKEN;
             }
 
-            throw new JWTDecodeFailureException($reason, sprintf('Invalid JWT Token. The following claim was not verified: %s.', $e->getClaim()));
+            throw new JWTDecodeFailureException($reason, \sprintf('Invalid JWT Token. The following claim was not verified: %s.', $e->getClaim()));
         } catch (InvalidHeaderException $e) {
-            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, sprintf('Invalid JWT Token. The following header was not verified: %s.', $e->getHeader()));
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, \sprintf('Invalid JWT Token. The following header was not verified: %s.', $e->getHeader()));
         } catch (\Exception $e) {
-            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, sprintf('Invalid JWT Token: %s', $e->getMessage()), $e);
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, \sprintf('Invalid JWT Token: %s', $e->getMessage()), $e);
         }
     }
 
@@ -324,9 +326,9 @@ final class LexikJoseEncoder implements JWTEncoderInterface
     private function getAdditionalPayload(): array
     {
         return [
-            'jti' => Base64Url::encode(random_bytes(64)),
-            'exp' => time() + $this->ttl,
-            'iat' => time(),
+            'jti' => Base64Url::encode(\random_bytes(64)),
+            'exp' => \time() + $this->ttl,
+            'iat' => \time(),
             'iss' => $this->issuer,
             'aud' => $this->audience,
         ];
@@ -338,8 +340,8 @@ final class LexikJoseEncoder implements JWTEncoderInterface
     private function getSignatureHeader()
     {
         return [
-            'typ'  => 'JWT',
-            'alg'  => $this->signatureAlgorithm,
+            'typ' => 'JWT',
+            'alg' => $this->signatureAlgorithm,
             'crit' => ['alg'],
         ];
     }
@@ -350,12 +352,12 @@ final class LexikJoseEncoder implements JWTEncoderInterface
     private function getEncryptionHeader()
     {
         return [
-            'typ'  => 'JWT',
-            'cty'  => 'JWT',
-            'alg'  => $this->keyEncryptionAlgorithm,
-            'enc'  => $this->contentEncryptionAlgorithm,
-            'iss'  => $this->issuer,
-            'aud'  => $this->audience,
+            'typ' => 'JWT',
+            'cty' => 'JWT',
+            'alg' => $this->keyEncryptionAlgorithm,
+            'enc' => $this->contentEncryptionAlgorithm,
+            'iss' => $this->issuer,
+            'aud' => $this->audience,
             'crit' => ['iss', 'aud', 'alg', 'enc'],
         ];
     }

@@ -26,7 +26,7 @@ $rulesProvider = new Facile\CodingStandards\Rules\CompositeRulesProvider([
  */
 $autoloadPathProvider = new Facile\CodingStandards\AutoloadPathProvider();
 $finder = PhpCsFixer\Finder::create()
-    ->in($autoloadPathProvider->getPaths())
+    ->in(__DIR__)
     ->exclude('DependencyInjection');
 
 $config = PhpCsFixer\Config::create();

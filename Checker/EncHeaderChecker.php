@@ -39,12 +39,12 @@ final class EncHeaderChecker implements HeaderChecker
      */
     public function checkHeader($algorithm)
     {
-        if (!is_string($algorithm)) {
+        if (! \is_string($algorithm)) {
             throw new InvalidHeaderException('The value of the header "enc" is not valid', 'enc', $algorithm);
         }
 
         if ($this->algorithm !== $algorithm) {
-            throw new InvalidHeaderException(sprintf('The algorithm "%s" is not known.', $algorithm), 'enc', $algorithm);
+            throw new InvalidHeaderException(\sprintf('The algorithm "%s" is not known.', $algorithm), 'enc', $algorithm);
         }
     }
 

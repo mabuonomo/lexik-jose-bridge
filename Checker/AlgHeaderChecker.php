@@ -39,12 +39,12 @@ final class AlgHeaderChecker implements HeaderChecker
      */
     public function checkHeader($algorithm)
     {
-        if (!is_string($algorithm)) {
+        if (! \is_string($algorithm)) {
             throw new InvalidHeaderException('The value of the header "alg" is not valid', 'alg', $algorithm);
         }
 
         if ($this->algorithm !== $algorithm) {
-            throw new InvalidHeaderException(sprintf('The algorithm "%s" is not known.', $algorithm), 'alg', $algorithm);
+            throw new InvalidHeaderException(\sprintf('The algorithm "%s" is not known.', $algorithm), 'alg', $algorithm);
         }
     }
 

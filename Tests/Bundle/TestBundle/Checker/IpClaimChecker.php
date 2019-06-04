@@ -29,7 +29,7 @@ final class IpClaimChecker implements ClaimChecker
      */
     public function checkClaim($ip)
     {
-        if (!is_string($ip) || !filter_var($ip, FILTER_VALIDATE_IP)) {
+        if (! \is_string($ip) || ! \filter_var($ip, FILTER_VALIDATE_IP)) {
             throw new InvalidClaimException('The claim "ip" is not valid.', 'ip', $ip);
         }
     }
