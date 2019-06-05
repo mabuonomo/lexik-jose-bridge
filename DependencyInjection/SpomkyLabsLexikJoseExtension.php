@@ -154,7 +154,7 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
 //                    file_get_contents($bridgeConfig['openid_jwt_key_url'])
 //                ),
 //                'is_public' => $isDebug
-                 'value' => file_get_contents($bridgeConfig['openid_jwt_key_url']),
+                 'value' => file_get_contents($bridgeConfig['key_set_url']),
                  'is_public' => $isDebug
             ]
         );
