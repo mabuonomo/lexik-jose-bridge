@@ -93,11 +93,17 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
 
     /**
      * @param ContainerBuilder $container
+     * @throws \Exception
      */
     public function prepend(ContainerBuilder $container):void
     {
         $isDebug = $container->getParameter('kernel.debug');
-        $bridgeConfig = current($container->getExtensionConfig($this->getAlias()));
+//        $bridgeConfig = current($container->getExtensionConfig($this->getAlias()));
+
+        $bridgeConfig = $container->getExtensionConfig($this->getAlias());
+        $bridgeConfig = $container->getParameterBag()->resolveValue($bridgeConfig);
+        $bridgeConfig = $this->processConfiguration(new Configuration(), $bridgeConfig);
+
         if (!array_key_exists('claim_checked', $bridgeConfig)) {
             $bridgeConfig['claim_checked'] = [];
         }
@@ -109,7 +115,7 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
             $container,
             $this->getAlias(),
             [
-                $container->getParameter('signature_algorithm')
+                $bridgeConfig['signature_algorithm']
             ],
             $isDebug
         );
@@ -118,7 +124,7 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
             $container,
             $this->getAlias(),
             [
-                $container->getParameter('signature_algorithm')
+                $bridgeConfig['signature_algorithm']
             ],
             $isDebug
         );
@@ -145,7 +151,7 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
             [
                 'value' => $container->get('http.cache.service')->getContent(
                     '/tmp/openid_certs',
-                    file_get_contents($container->getParameter('openid_jwt_key_url'))
+                    file_get_contents($bridgeConfig['openid_jwt_key_url'])
                 ),
                 'is_public' => $isDebug
             ]
