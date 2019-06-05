@@ -149,13 +149,8 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
             'lexik_jose_bridge.signature',
             'jwkset',
             [
-//                'value' => $container->get('http.cache.service')->getContent(
-//                    '/tmp/openid_certs',
-//                    file_get_contents($bridgeConfig['openid_jwt_key_url'])
-//                ),
-//                'is_public' => $isDebug
-                 'value' => file_get_contents($bridgeConfig['key_set_url']),
-                 'is_public' => $isDebug
+                'value' => $bridgeConfig['key_set_url'],
+                'is_public' => $isDebug
             ]
         );
 
@@ -165,6 +160,23 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
 
         $lexikConfig = ['encoder' => ['service' => LexikJoseEncoder::class]];
         $container->prependExtensionConfig('lexik_jwt_authentication', $lexikConfig);
+    }
+
+    public function getContent($file, $url, $hours = 24)
+    {
+        if (\file_exists($file)) {
+            $current_time = \time();
+            $expire_time = $hours * 60 * 60;
+            $file_time = \filemtime($file);
+            if ($current_time - $expire_time < $file_time) {
+                return \file_get_contents($file);
+            }
+        }
+
+        $content = \file_get_contents($url);
+        \file_put_contents($file, $content);
+
+        return $content;
     }
 
     /**
