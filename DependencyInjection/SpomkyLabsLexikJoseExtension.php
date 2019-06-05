@@ -149,11 +149,13 @@ final class SpomkyLabsLexikJoseExtension extends Extension implements PrependExt
             'lexik_jose_bridge.signature',
             'jwkset',
             [
-                'value' => $container->get('http.cache.service')->getContent(
-                    '/tmp/openid_certs',
-                    file_get_contents($bridgeConfig['openid_jwt_key_url'])
-                ),
-                'is_public' => $isDebug
+//                'value' => $container->get('http.cache.service')->getContent(
+//                    '/tmp/openid_certs',
+//                    file_get_contents($bridgeConfig['openid_jwt_key_url'])
+//                ),
+//                'is_public' => $isDebug
+                 'value' => file_get_contents($bridgeConfig['openid_jwt_key_url']),
+                 'is_public' => $isDebug
             ]
         );
 
